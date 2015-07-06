@@ -8,7 +8,6 @@ from django.db.models.signals import (
     post_save, post_delete, m2m_changed)
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
-from elasticgit.models import Model, IntegerField, TextField
 from elasticgit import EG
 from elasticgit.models import Model, IntegerField, TextField
 
@@ -17,41 +16,35 @@ from elasticinit import TestStory
 #from git import GitCommandError
 
 class Story(models.Model):
-	title = models.CharField(max_length=200)
-	author = models.CharField(max_legth=50)
-	category = models.IntegerField()
-	body = models.CharField(max_length=200000)
+    title = models.CharField(max_length=200)
+    author = models.CharField(max_length=50)
+    category = models.IntegerField()
+    body = models.CharField(max_length=200000)
 
 class User(models.Model):
-	UUID = models.IntegerField()
-	surname = models.CharField(max_length=30)
-	username = models.CharField(max_length=30)
-	password = models.CharField(max_length=20)
+    UUID = models.IntegerField()
+    surname = models.CharField(max_length=30)
+    username = models.CharField(max_length=30)
+    password = models.CharField(max_length=20)
 
 #posting to EG
-@receiver(post_save, sender=Post)
+@receiver(post_save, sender=Story)
 def auto_save_to_git(sender, instance, created, **kwargs):
-	
+    
 
-	data = TestStory({
-		"title": instance.title,
-		"author": instance.author,
-		"category": instance.category,
-		"body": instance.body})
+    data = TestStory({
+        "title": instance.title,
+        "author": instance.author,
+        "category": instance.category,
+        "body": instance.body})
 
-	try:
-		workspace = EG.workspace('/Users/codieroelf/repositories/backend/mina')
-
-		workspace.setup('Codie Roelf', 'codiebeulaine@gmail.com')
+    try:
+        workspace = EG.workspace('/Users/codieroelf/repositories/backend/mina')
+        workspace.setup('Codie Roelf', 'codiebeulaine@gmail.com')
         workspace.save(data, 'saving')
         workspace.refresh_index()
     except ValueError:
-        #page = eg_models.Page(data)
-        #workspace.save(page, 'Page created: %s' % instance.title,
-         #              author=get_author_info(instance.last_author))
         workspace.refresh_index()
-        # Always update the UUID as we've just generated a new one.
-        #Post.objects.filter(pk=instance.pk).update(uuid=page.uuid)
 
 
 

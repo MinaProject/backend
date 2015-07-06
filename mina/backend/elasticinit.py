@@ -1,8 +1,8 @@
 from elasticgit import EG
 from elasticgit.models import Model, IntegerField, TextField
 
-workspace = EG.workspace('/Users/codieroelf/repositories/backend/mina')
-workspace.setup('Codie Roelf', 'codiebeulaine@gmail.com')
+#workspace = EG.workspace('/Users/codieroelf/repositories/backend/mina')
+#workspace.setup('Codie Roelf', 'codiebeulaine@gmail.com')
 
 
 class TestStory(Model):
