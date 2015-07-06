@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 GIT_REPO_URL = 'https://github.com/MinaProject/test_content.git'
-GIT_REPO_PATH = 'https://github.com/MinaProject/test_content.git'
+GIT_REPO_PATH = 'repos/test_content'
 DEFAULT_TARGET_NAME = 'Default Target'
 ELASTIC_GIT_INDEX_PREFIX = None
 ELASTICSEARCH_HOST = 'http://localhost:9200'

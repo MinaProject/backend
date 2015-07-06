@@ -10,9 +10,8 @@ from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 from elasticgit import EG
 from elasticgit.models import Model, IntegerField, TextField
-
 from elasticinit import TestStory
-
+from backend.utils import push_to_git
 #from git import GitCommandError
 
 class Story(models.Model):
@@ -29,7 +28,7 @@ class User(models.Model):
 
 #posting to EG
 @receiver(post_save, sender=Story)
-def auto_save_to_git(sender, instance, created, **kwargs):
+def auto_save_to_git(instance, **kwargs):
     
 
     data = TestStory({
@@ -39,11 +38,17 @@ def auto_save_to_git(sender, instance, created, **kwargs):
         "body": instance.body})
 
     try:
-        workspace = EG.workspace('/Users/codieroelf/repositories/backend/mina')
+        workspace = EG.workspace(settings.GIT_REPO_PATH,
+            index_prefix=settings.ELASTIC_GIT_INDEX_PREFIX,
+            es={'urls': [settings.ELASTICSEARCH_HOST]})
         workspace.setup('Codie Roelf', 'codiebeulaine@gmail.com')
         workspace.save(data, 'saving')
         workspace.refresh_index()
+        push_to_git(settings.GIT_REPO_PATH,
+            index_prefix=settings.ELASTIC_GIT_INDEX_PREFIX,
+            es_host=settings.ELASTICSEARCH_HOST)
     except ValueError:
+        raise
         workspace.refresh_index()
 
 
