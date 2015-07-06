@@ -3,3 +3,7 @@ djangorestframework
 markdown
 django-filter
 unicore.distribute
+elastic
+pep8
+elastic-git>=1.0.2
+gitdb==0.6.4
