@@ -12,19 +12,33 @@ from elasticgit import EG
 from elasticgit.models import Model, IntegerField, TextField
 from elasticinit import TestStory
 from backend.utils import push_to_git
+import uuid
 #from git import GitCommandError
 
 class Story(models.Model):
     title = models.CharField(max_length=200)
-    author = models.CharField(max_length=50)
+    author = models.CharField(max_length=200)
     category = models.IntegerField()
     body = models.CharField(max_length=200000)
+    uuid = models.CharField(
+        max_length=32,
+        blank=True,
+        null=True,
+        unique=True,
+        db_index=True,
+        editable=False)
 
-class User(models.Model):
-    UUID = models.IntegerField()
+class diffUser(models.Model):
     surname = models.CharField(max_length=30)
     username = models.CharField(max_length=30)
     password = models.CharField(max_length=20)
+    uuid = models.CharField(
+        max_length=32,
+        blank=True,
+        null=True,
+        unique=True,
+        db_index=True,
+        editable=False)
 
 #posting to EG
 @receiver(post_save, sender=Story)
@@ -35,7 +49,9 @@ def auto_save_to_git(instance, **kwargs):
         "title": instance.title,
         "author": instance.author,
         "category": instance.category,
-        "body": instance.body})
+        "body": instance.body,
+        "uuid":uuid.uuid4().hex}
+        )
 
     try:
         workspace = EG.workspace(settings.GIT_REPO_PATH,

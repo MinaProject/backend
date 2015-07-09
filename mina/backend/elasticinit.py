@@ -1,12 +1,10 @@
 from elasticgit import EG
 from elasticgit.models import Model, IntegerField, TextField
+from elasticgit import models
 
-#workspace = EG.workspace('/Users/codieroelf/repositories/backend/mina')
-#workspace.setup('Codie Roelf', 'codiebeulaine@gmail.com')
-
-
-class TestStory(Model):
-	title = TextField('The Title')
-	author = TextField('The Author')
-	category = IntegerField('The Category')
-	body = TextField('The Story')
+class TestStory(models.Model):
+	title = models.TextField('The Title')
+	author = models.TextField('The Author')
+	category = models.IntegerField('The Category')
+	body = models.TextField('The Story')
+	uuid = models.UUIDField('The UUID')
