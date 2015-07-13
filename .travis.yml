@@ -1,4 +1,6 @@
 language: python
+services:
+  - "elasticsearch"
 python:
   – "2.7"
 install:
