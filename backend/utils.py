@@ -22,5 +22,6 @@ def pull_from_git(repo_path, index_prefix, es_host):
          remote = repo.remote()
          remote.fetch()
 	storyList = workspace.S(TestStory)
-
-	return json.dumps([dict(a)for a in storyList])
+	#print(list(storyList))
+	#print ([dict(a.get_object()) for a in storyList])
+	return json.dumps([dict(a.get_object()) for a in storyList])
