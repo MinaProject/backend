@@ -34,6 +34,15 @@ The Story model is a JSON object that is received by the backend via Django and 
         "body": 'The Story'}
 
 
+URLs
+----
+
+At the moment this project is hosted locally and not on a server. Nonetheless the urls are as follows:
+
+To create a user: backend/createUser
+To create a story: backend/createStory
+To view all stories: backend/
+
 .. toctree::
    :maxdepth: 2
 
