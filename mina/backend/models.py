@@ -15,6 +15,16 @@ from backend.utils import push_to_git
 import uuid
 #from git import GitCommandError
 
+
+class UserProfile(models.Model):
+    user = models.ForeinKey('auth.User')
+    uuid = models.CharField(
+        max_length=32,
+        unique=True,
+        db_index=True,
+        editable=False)
+
+
 class Story(models.Model):
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=200)
@@ -28,17 +38,20 @@ class Story(models.Model):
         db_index=True,
         editable=False)
 
-class diffUser(models.Model):
-    surname = models.CharField(max_length=30)
-    username = models.CharField(max_length=30)
-    password = models.CharField(max_length=20)
-    uuid = models.CharField(
-        max_length=32,
-        blank=True,
-        null=True,
-        unique=True,
-        db_index=True,
-        editable=False)
+
+@receiver(post_save, sender=User)
+def auto_create_repo(instance, **kwargs):
+    try:
+        repoPath = 'repos/' + uuid.uuid4().hex
+        ## create user profile
+        ## link ^^^ to user
+        EG.init_repo(repoPath, bare=False)
+        push_to_git(repoPath,
+            index_prefix=settings.ELASTIC_GIT_INDEX_PREFIX,
+            es_host=settings.ELASTICSEARCH_HOST)
+    except ValueError:
+        raise
+        worksapce.refresh_index()
 
 #posting to EG
 @receiver(post_save, sender=Story)

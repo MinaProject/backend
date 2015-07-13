@@ -27,23 +27,13 @@ Story Model
 The Story model is a JSON object that is received by the backend via Django and passed straight into an elasticgit model. The model is as follows:
 
 .. code:: python
-	data = {
-        "title": 'Story Title',
+
+	Story = {"title": 'Story Title',
         "author": 'The Author',
         "category": '1',
         "body": 'The Story'}
 
-	
-Contents:
 
 .. toctree::
    :maxdepth: 2
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 
