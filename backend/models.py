@@ -1,5 +1,4 @@
 import os
-
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import models
@@ -13,7 +12,20 @@ from elasticgit.models import Model, IntegerField, TextField
 from elasticinit import TestStory
 from backend.utils import push_to_git
 import uuid
+from github3 import login
+from github3 import GitHub
+
 #from git import GitCommandError
+
+
+class UserProfile(models.Model):
+    user = models.ForeignKey('auth.User')
+    uuid = models.CharField(
+        max_length=32,
+        unique=True,
+        db_index=True,
+        editable=False)
+
 
 class Story(models.Model):
     title = models.CharField(max_length=200)
@@ -28,17 +40,29 @@ class Story(models.Model):
         db_index=True,
         editable=False)
 
-class diffUser(models.Model):
-    surname = models.CharField(max_length=30)
-    username = models.CharField(max_length=30)
-    password = models.CharField(max_length=20)
-    uuid = models.CharField(
-        max_length=32,
-        blank=True,
-        null=True,
-        unique=True,
-        db_index=True,
-        editable=False)
+
+@receiver(post_save, sender=User)
+def auto_create_repo(instance, **kwargs):
+    try:
+        userUUID = uuid.uuid4().hex
+        gh = login('minaglobalfoundation@gmail.com', password='minafoundation15')
+        githubRepo = gh.create_repository(userUUID)
+        repoPath = 'repos/' + userUUID
+        profile = UserProfile(user=instance, uuid=userUUID)
+        EG.init_repo(repoPath, bare=False)
+        workspace = EG.workspace(repoPath,
+            index_prefix='',
+            es={'urls': ['http://localhost:9200']})
+        #import pdb; pdb.set_trace()
+        workspace.repo.create_remote('origin', githubRepo.html_url)
+        repo = workspace.repo
+        remote = repo.remote()
+        remote.fetch()
+        remote_master = remote.refs.master
+        remote.push(remote_master.remote_head)
+    except ValueError:
+        raise
+        workspace.refresh_index()
 
 #posting to EG
 @receiver(post_save, sender=Story)
