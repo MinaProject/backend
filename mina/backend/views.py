@@ -6,6 +6,7 @@ from django.http import JsonResponse
 import json
 import uuid
 from django.contrib.auth.models import User, UserManager
+
 def stories(request):
     listOfStories =  pull_from_git('repos/test_content',
             index_prefix='',
