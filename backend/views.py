@@ -19,6 +19,7 @@ def create_user(request):
             data=json.loads(request.body)
             name=data['name']
             username=data['username']
+            password=data['password']
             uuid=uuid.uuid4().hex
 
             user = User.objects.create_user(username, email=None)

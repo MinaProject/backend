@@ -14,7 +14,9 @@ from backend.utils import push_to_git
 import uuid
 from github3 import login
 from github3 import GitHub
-
+from git import Repo
+join = os.path.join
+import hashlib, binascii
 #from git import GitCommandError
 
 
@@ -45,15 +47,25 @@ class Story(models.Model):
 def auto_create_repo(instance, **kwargs):
     try:
         userUUID = uuid.uuid4().hex
-        gh = login('minaglobalfoundation@gmail.com', password='minafoundation15')
-        githubRepo = gh.create_repository(userUUID)
+
+        #creating repo on GitHub
+        gh = GitHub('minaglobalfoundation@gmail.com', password='minafoundation15')
+        githubRepo = gh.create_repository(userUUID, description=u'', homepage=u'', private=False, has_issues=True, has_wiki=True, auto_init=True, gitignore_template=u'')
+        githubRepo.create_blob('hello', 'utf-8')
+        githubRepo.create_commit('first commit', '', '')
+        
+        #creating local repo
         repoPath = 'repos/' + userUUID
         profile = UserProfile(user=instance, uuid=userUUID)
         EG.init_repo(repoPath, bare=False)
+
+        #creating workspace in local repo
         workspace = EG.workspace(repoPath,
             index_prefix='',
             es={'urls': ['http://localhost:9200']})
         #import pdb; pdb.set_trace()
+
+        #pushing local repo to GitHub repo
         workspace.repo.create_remote('origin', githubRepo.html_url)
         repo = workspace.repo
         remote = repo.remote()
