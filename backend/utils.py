@@ -27,3 +27,9 @@ def pull_from_git(repo_path, index_prefix, es_host):
 	#print(list(storyList))
 	#print ([dict(a.get_object()) for a in storyList])
 	return json.dumps([dict(a.to_object()) for a in storyList])
+
+def delete_from_git(repo_path, index_prefix, es_host):
+    workspace = EG.workspace(repo_path,
+                             index_prefix=index_prefix,
+                             es={'urls': [es_host]})
+    
