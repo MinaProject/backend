@@ -1,0 +1,3 @@
+Django
+djangorestframework
+elastic-git
