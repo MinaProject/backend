@@ -1,0 +1,18 @@
+sudo: false
+language: python
+services:
+  - elasticsearch
+python:
+  - 2.7
+cache:
+  directories:
+    - $HOME/.cache/pip
+install:
+  - pip install --upgrade pip
+  - pip install -r requirements.txt
+  - pip install flake8
+before_script:
+  - python manage.py migrate --noinput
+script:
+  - flake8
+  - python manage.py test

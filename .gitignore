@@ -1,1 +1,11 @@
-ve
+.coverage
+/ve/
+*.pyc
+*.egg-info
+/dist/
+/docs/_build/
+db.sqliter3
+/htmlcov/
+/vepypy/
+/repos/
+
