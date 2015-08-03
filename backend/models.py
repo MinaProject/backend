@@ -47,13 +47,13 @@ def auto_create_repo(instance, **kwargs):
         # creating repo on GitHub
         gh = GitHub('minaglobalfoundation@gmail.com',
                     password='minafoundation15')
-        githubRepo = gh.create_repository(userUUID, description=u'',
-                                          homepage=u'',
-                                          private=False,
-                                          has_issues=True,
-                                          has_wiki=True,
-                                          auto_init=True,
-                                          gitignore_template=u'')
+        githubRepo = gh.create_repo(userUUID, description=u'',
+                                    homepage=u'',
+                                    private=False,
+                                    has_issues=True,
+                                    has_wiki=True,
+                                    auto_init=True,
+                                    gitignore_template=u'')
         githubRepo.create_blob('hello', 'utf-8')
         githubRepo.create_commit('first commit', '', '')
 

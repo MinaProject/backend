@@ -25,6 +25,14 @@ def pull_from_git(repo_path, index_prefix, es_host):
         remote = repo.remote()
         remote.fetch()
     storyList = workspace.S(TestStory)
-    # print(list(storyList))
-    # print ([dict(a.get_object()) for a in storyList])
     return json.dumps([dict(a.to_object()) for a in storyList])
+
+
+def setup_workspace(repo_path, index_prefix, es_host):
+    workspace = EG.workspace(repo_path,
+                             index_prefix=index_prefix,
+                             es={'urls': [es_host]})
+    workspace.setup('foo', 'minaglobalfoundation@gmail.com')
+    while not workspace.index_ready():
+        pass
+    return workspace

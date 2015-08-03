@@ -2,9 +2,10 @@ from django.test import TestCase
 from backend import utils
 
 
-class BaseBackendTestCase(TestCase):
+class BaseTestCase(TestCase):
 
     def mk_workspace(self):
         ws = utils.setup_workspace('repos/test_content',
-                                   index_prefix='',
-                                   es={'urls': ['http://localhost:9200']})
+                                   '',
+                                   'http://localhost:9200')
+        return ws
