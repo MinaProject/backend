@@ -8,7 +8,6 @@ class TestModels(BaseTestCase):
         user = User.objects.create_user('foo', 'foo@example.org', 'bar')
         user.first_name = 'Foo'
         user.last_name = 'Bar'
-        user.save()
 
         self.assertEqual(
             ('Foo', 'foo@example.org'),
