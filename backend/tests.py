@@ -5,7 +5,7 @@ from backend.base import BaseTestCase
 class TestModels(BaseTestCase):
 
     def test_user_info(self):
-        user = User.objects.create_user('foo', 'foo@example.org', 'bar')
+        user = User.objects.create_user('foo', 'foo@example.org')
         user.first_name = 'Foo'
         user.last_name = 'Bar'
 
