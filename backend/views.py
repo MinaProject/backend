@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from backend.utils import pull_from_git
 import json
 from django.contrib.auth.models import User
-from django.db import models
+from models import Story
 
 
 def stories(request):
