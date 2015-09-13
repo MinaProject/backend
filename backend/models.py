@@ -7,9 +7,7 @@ from django.db.models.signals import (
 from django.dispatch import receiver
 from elasticgit import EG
 from elasticinit import TestStory
-from backend.utils import push_to_git
 import uuid
-from github3 import GitHub
 
 join = os.path.join
 
@@ -42,39 +40,38 @@ def auto_create_repo(instance, **kwargs):
     try:
         userUUID = uuid.uuid4().hex
 
-        # creating repo on GitHub
-        gh = GitHub('minaglobalfoundation@gmail.com',
-                    password='minafoundation15')
-        githubRepo = gh.create_repo(userUUID, description=u'',
-                                    homepage=u'',
-                                    private=False,
-                                    has_issues=True,
-                                    has_wiki=True,
-                                    auto_init=True,
-                                    gitignore_template=u'')
-        githubRepo.create_blob('hello', 'utf-8')
-        githubRepo.create_commit('first commit', '', '')
+        # # creating repo on GitHub
+        # gh = GitHub('minaglobalfoundation@gmail.com',
+        #             password='minafoundation15')
+        # githubRepo = gh.create_repo(userUUID, description=u'',
+        #                             homepage=u'',
+        #                             private=False,
+        #                             has_issues=True,
+        #                             has_wiki=True,
+        #                             auto_init=True,
+        #                             gitignore_template=u'')
+        # githubRepo.create_blob('hello', 'utf-8')
+        # githubRepo.create_commit('first commit', '', '')
 
-        # creating local repo
-        repoPath = 'repos/' + userUUID
+        # # creating local repo
+        # repoPath = 'repos/' + userUUID
         UserProfile(user=instance, uuid=userUUID)
-        EG.init_repo(repoPath, bare=False)
+        # EG.init_repo(repoPath, bare=False)
 
-        # creating workspace in local repo
-        workspace = EG.workspace(repoPath,
-                                 index_prefix='',
-                                 es={'urls': ['http://localhost:9200']})
+        # # creating workspace in local repo
+        # workspace = EG.workspace(repoPath,
+        #                          index_prefix='',
+        #                          es={'urls': ['http://localhost:9200']})
 
-        # pushing local repo to GitHub repo
-        workspace.repo.create_remote('origin', githubRepo.html_url)
-        repo = workspace.repo
-        remote = repo.remote()
-        remote.fetch()
-        remote_master = remote.refs.master
-        remote.push(remote_master.remote_head)
+        # # pushing local repo to GitHub repo
+        # workspace.repo.create_remote('origin', githubRepo.html_url)
+        # repo = workspace.repo
+        # remote = repo.remote()
+        # remote.fetch()
+        # remote_master = remote.refs.master
+        # remote.push(remote_master.remote_head)
     except ValueError:
-        raise
-        workspace.refresh_index()
+        print''
 
 
 # posting to EG
@@ -88,15 +85,19 @@ def auto_save_to_git(instance, **kwargs):
         "uuid": uuid.uuid4().hex})
 
     try:
+        EG.init_repo('repos/test_content', bare=False)
         ws = EG.workspace(settings.GIT_REPO_PATH,
-                          index_prefix=settings.ELASTIC_GIT_INDEX_PREFIX,
-                          es={'urls': [settings.ELASTICSEARCH_HOST]})
+                          index_prefix='',
+                          es={'urls': ['http://localhost:9200']})
         ws.setup('Codie Roelf', 'codiebeulaine@gmail.com')
         ws.save(data, 'saving')
+        if ws.repo.remotes:
+            repo = ws.repo
+            remote = repo.remote()
+            remote.fetch()
+            remote_master = remote.refs.master
+            remote.push(remote_master.remote_head)
         ws.refresh_index()
-        push_to_git(settings.GIT_REPO_PATH,
-                    index_prefix=settings.ELASTIC_GIT_INDEX_PREFIX,
-                    es_host=settings.ELASTICSEARCH_HOST)
+
     except ValueError:
-        raise
-        ws.refresh_index()
+        print "error"

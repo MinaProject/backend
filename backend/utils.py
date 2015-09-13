@@ -4,7 +4,7 @@ import json
 
 
 def push_to_git(repo_path, index_prefix, es_host):
-    workspace = EG.workspace(repo_path,
+    workspace = EG.workspace('repos/test_content',
                              index_prefix=index_prefix,
                              es={'urls': [es_host]})
     if workspace.repo.remotes:
