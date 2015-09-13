@@ -13,12 +13,9 @@ def stories(request):
 
 
 def create_user(request):
-    print(request.method)
     if request.method == 'POST':
         try:
-            print(request.POST)
             data = request.POST
-            print(data)
             User.objects.create_user(username=data['username'],
                                      email=None,
                                      first_name=data['name'],
@@ -28,7 +25,7 @@ def create_user(request):
             response.body = 'created'
             return response
         except:
-            print 'nope'
+            print ''
     response = HttpResponse()
     response.body = 'not created'
     return response
@@ -37,21 +34,19 @@ def create_user(request):
 def create_story(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)
-            Story.create(title=data['title'],
-                         author=data['author'],
-                         category=data['category'],
-                         body=data['body'])
-            return HttpResponse.__init__(content='',
-                                         content_type=None,
-                                         status=201,
-                                         reason='Story successfully created')
+            data = request.POST
+            Story.objects.create(title=data['title'],
+                                 author=data['author'],
+                                 category=data['category'],
+                                 body=data['body'])
+            response = HttpResponse()
+            response.body = 'created'
+            return response
         except:
-            print 'nope'
-    return HttpResponse.__init__(content='',
-                                 content_type=None,
-                                 status=400,
-                                 reason='Story not created')
+            print ''
+    response = HttpResponse()
+    response.body = 'not created'
+    return response
 
 
 def view_user_stories(request):
