@@ -36,7 +36,7 @@ class Story(models.Model):
 
 
 @receiver(post_save, sender=User)
-def auto_create_repo(instance, **kwargs):
+def auto_create_profile(instance, **kwargs):
     try:
         userUUID = uuid.uuid4().hex
 
@@ -91,6 +91,7 @@ def auto_save_to_git(instance, **kwargs):
                           es={'urls': ['http://localhost:9200']})
         ws.setup('Codie Roelf', 'codiebeulaine@gmail.com')
         ws.save(data, 'saving')
+        ws.refresh_index()
         if ws.repo.remotes:
             repo = ws.repo
             remote = repo.remote()
