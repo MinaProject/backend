@@ -13,3 +13,4 @@ sphinx-autobuild
 github3.py
 betamax
 mock-server
+elasticsearch

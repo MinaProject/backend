@@ -1,14 +1,18 @@
 from django.http import HttpResponse
-from backend.utils import pull_from_git
+from backend.utils import pull_from_git, delete_from_git
 import json
 from django.contrib.auth.models import User
-from models import Story
+from models import Story, UserProfile
 
 
 def stories(request):
     listOfStories = pull_from_git('repos/test_content',
                                   index_prefix='',
                                   es_host='http://localhost:9200')
+    user1 = User.objects.get(username='New')
+    print user1.username
+    up = UserProfile.objects.get(user=user1)
+    print (up.uuid)
     return HttpResponse(listOfStories)
 
 
@@ -46,6 +50,40 @@ def create_story(request):
             print ''
     response = HttpResponse()
     response.body = 'not created'
+    return response
+
+
+def delete_story(request):
+    if request.method == 'POST':
+        try:
+            data = request.POST
+            storyUUID = data['uuid']
+            delete_from_git(storyUUID)
+            response = HttpResponse()
+            response.body = 'deleted'
+            return response
+        except:
+            print ''
+    response = HttpResponse()
+    response.body = 'not deleted'
+    return response
+
+
+def delete_user(request):
+    if request.method == 'POST':
+        try:
+            data = request.POST
+            userProfileUUID = data['uuid']
+            deleteUser = UserProfile.objects.get(uuid=userProfileUUID).user
+            User.objects.delete(deleteUser)
+            UserProfile.objects.delete(uuid=userProfileUUID)
+            response = HttpResponse()
+            response.body = 'deleted'
+            return response
+        except:
+            print ''
+    response = HttpResponse()
+    response.body = 'not deleted'
     return response
 
 

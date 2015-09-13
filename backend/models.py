@@ -55,7 +55,7 @@ def auto_create_profile(instance, **kwargs):
 
         # # creating local repo
         # repoPath = 'repos/' + userUUID
-        UserProfile(user=instance, uuid=userUUID)
+        UserProfile.objects.create(user=instance, uuid=userUUID)
         # EG.init_repo(repoPath, bare=False)
 
         # # creating workspace in local repo
@@ -85,13 +85,12 @@ def auto_save_to_git(instance, **kwargs):
         "uuid": uuid.uuid4().hex})
 
     try:
-        EG.init_repo('repos/test_content', bare=False)
+        # EG.init_repo('repos/test_content', bare=False)
         ws = EG.workspace(settings.GIT_REPO_PATH,
-                          index_prefix='',
+                          index_prefix=None,
                           es={'urls': ['http://localhost:9200']})
         ws.setup('Codie Roelf', 'codiebeulaine@gmail.com')
         ws.save(data, 'saving')
-        ws.refresh_index()
         if ws.repo.remotes:
             repo = ws.repo
             remote = repo.remote()
