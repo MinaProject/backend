@@ -13,8 +13,6 @@ from github3 import GitHub
 
 join = os.path.join
 
-# from git import GitCommandError
-
 
 class UserProfile(models.Model):
     user = models.ForeignKey('auth.User')

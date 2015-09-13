@@ -11,3 +11,5 @@ gitdb==0.6.4
 sphinx 
 sphinx-autobuild
 github3.py
+betamax
+mock-server
