@@ -39,9 +39,18 @@ URLs
 
 At the moment this project is hosted locally and not on a server. Nonetheless the urls are as follows:
 
-To create a user: backend/createUser
-To create a story: backend/createStory
+To create a user: backend/create_user
+	This takes in an HttpRequest that has a POST method where the post contains json user model defined above
+To create a story: backend/create_story
+	This takes in an HttpRequest that has a POST method where the post contains json story model defined above
+To delete a user: backend/delete_user
+	This takes in an HttpRequest that has a POST method where the post contains uuid of the user to be deleted
+To delete a story: backend/delete_story
+	This takes in an HttpRequest that has a POST method where the post contains the uuid of the story to be 		deleted
+To view a user's info: backend/view_user_info
+	This takes in an HttpRequest that has a POST method where the post contains uuid of the user to be viewed
 To view all stories: backend/
+	This takes an request as an argument
 
 .. toctree::
    :maxdepth: 2
