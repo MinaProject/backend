@@ -21,12 +21,12 @@ def pull_from_git(repo_path, index_prefix, es_host, uuid, category):
                              es={'urls': [es_host]})
     # workspace.sync(TestStory)
     workspace.pull()
-    if uuid and category is None:
-        storyList = workspace.S(TestStory)
+    if uuid is None and category is None:
+        storyList = workspace.S(TestStory)[:100]
     elif category is None:
-        storyList = workspace.S(TestStory).filter(author=uuid)
+        storyList = workspace.S(TestStory)[:100].filter(author=uuid)
     elif uuid is None:
-        storyList = workspace.S(TestStory).filter(category=category)
+        storyList = workspace.S(TestStory)[:100].filter(category=category)
     return json.dumps([dict(a.to_object()) for a in storyList])
 
 
