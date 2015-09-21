@@ -1,11 +1,13 @@
 import mock
+from mock import patch
 from views import (create_user, create_story, delete_user, delete_story,
-                   view_story, view_user_stories,
+                   view_story, view_user_stories, stories,
                    view_category_stories, view_user)
 from django.http import HttpRequest
 import unittest
 from models import Story, UserProfile
 from django.contrib.auth.models import User
+import elasticgit
 
 
 class TestCRUD(unittest.TestCase):
@@ -37,7 +39,8 @@ class TestCRUD(unittest.TestCase):
         assert create_story(request).body == 'created'
 
         # test view all stories
-        # assert stories(request) != []
+        with patch.object(elasticgit.workspace.Workspace, 'pull'):
+            assert stories(request) != []
 
         # test view specific story
         story = Story.objects.get(author=uuid)
@@ -45,15 +48,18 @@ class TestCRUD(unittest.TestCase):
         request = HttpRequest()
         request.method = 'POST'
         request.POST = storyUUID
-        assert view_story(request).body != 'story not found'
+        with patch.object(elasticgit.workspace.Workspace, 'pull'):
+            assert view_story(request).body != 'story not found'
 
         # test view all category stories
         request.POST = story.category
-        assert view_category_stories(request) != 'story not found'
+        with patch.object(elasticgit.workspace.Workspace, 'pull'):
+            assert view_category_stories(request) != 'story not found'
 
         # test view all user stories
         request.POST = story.uuid
-        assert view_user_stories(request) != 'story not found'
+        with patch.object(elasticgit.workspace.Workspace, 'pull'):
+            assert view_user_stories(request) != 'story not found'
 
         # test view user information
         request.POST = uuid
