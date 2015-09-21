@@ -1,6 +1,6 @@
 import mock
 from views import (create_user, create_story, delete_user, delete_story,
-                   stories, view_story, view_user_stories,
+                   view_story, view_user_stories,
                    view_category_stories, view_user)
 from django.http import HttpRequest
 import unittest
