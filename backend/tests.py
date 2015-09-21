@@ -1,7 +1,7 @@
 import mock
 from mock import patch
 from views import (create_user, create_story, delete_user, delete_story,
-                   view_story, view_user_stories, stories,
+                   view_story, view_user_stories,
                    view_category_stories, view_user)
 from django.http import HttpRequest
 import unittest
@@ -38,10 +38,10 @@ class TestCRUD(unittest.TestCase):
                         "co_authors": None}
         assert create_story(request).body == 'created'
 
-        # test view all stories
-        with patch.object(elasticgit.workspace.Workspace, 'pull',
-                          return_value=None):
-            assert stories(request) is None
+        # # test view all stories
+        # with patch.object(elasticgit.workspace.Workspace, 'pull',
+        #                   return_value=None):
+        #     assert stories(request) is None
 
         # test view specific story
         story = Story.objects.get(author=uuid)
