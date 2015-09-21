@@ -35,7 +35,7 @@ class Story(models.Model):
         unique=True,
         db_index=True,
         editable=False)
-    timestamp = models.IntegerField(default=0)
+    update_count = models.IntegerField(default=0)
     co_authors = models.CharField(
         max_length=32,
         blank=True,
@@ -93,7 +93,7 @@ def auto_save_to_git(instance, **kwargs):
         "category": instance.category,
         "body": instance.body,
         "uuid": instance.uuid,
-        "timestamp": instance.timestamp,
+        "update_count": instance.update_count,
         "co_authors": instance.co_authors})
 
     try:

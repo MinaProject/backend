@@ -32,7 +32,7 @@ class TestCRUD(unittest.TestCase):
                         "author": uuid,
                         "category": 1,
                         "body": 'foobar',
-                        "timestamp": 0,
+                        "update_count": 0,
                         "co_authors": None}
         assert create_story(request).body == 'created'
 
