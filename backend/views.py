@@ -91,6 +91,7 @@ def create_story(request):
                                  author=data['author'],
                                  category=data['category'],
                                  body=data['body'],
+                                 update_count=0,
                                  uuid=uuid.uuid4().hex)
             response = HttpResponse()
             response.body = 'created'
