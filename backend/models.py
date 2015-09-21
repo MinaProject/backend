@@ -23,7 +23,7 @@ class Story(models.Model):
     title = models.CharField(max_length=200)
     author = models.CharField(
         max_length=32,
-        unique=True,
+        unique=False,
         db_index=True,
         editable=False)
     category = models.IntegerField()

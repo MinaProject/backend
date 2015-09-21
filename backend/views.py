@@ -72,7 +72,6 @@ def create_user(request):
                                             last_name=data['surname'],
                                             password=data['password'])
             UserProfile.objects.create(user=user, uuid=uuid.uuid4().hex)
-
             response = HttpResponse()
             response.body = 'created'
             return response

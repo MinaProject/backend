@@ -7,5 +7,5 @@ class TestStory(models.Model):
     category = models.IntegerField('The Category')
     body = models.TextField('The Story')
     uuid = models.UUIDField('The UUID')
-    update_count = models.IntegerField('Update Count')
+    update_count = models.IntegerField('The Update Count')
     co_authors = models.ListField('The Co-Authors', fields=models.UUIDField)
