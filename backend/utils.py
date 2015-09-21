@@ -15,13 +15,18 @@ def push_to_git(repo_path, index_prefix, es_host):
         remote.push(remote_master.remote_head)
 
 
-def pull_from_git(repo_path, index_prefix, es_host):
+def pull_from_git(repo_path, index_prefix, es_host, uuid, category):
     workspace = EG.workspace(repo_path,
                              index_prefix=None,
                              es={'urls': [es_host]})
     # workspace.sync(TestStory)
     workspace.pull()
-    storyList = workspace.S(TestStory)
+    if uuid and category is None:
+        storyList = workspace.S(TestStory)
+    elif category is None:
+        storyList = workspace.S(TestStory).filter(author=uuid)
+    elif uuid is None:
+        storyList = workspace.S(TestStory).filter(category=category)
     return json.dumps([dict(a.to_object()) for a in storyList])
 
 

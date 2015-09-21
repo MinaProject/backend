@@ -53,20 +53,24 @@ an open-source tool for the collaborative or singular authoring and viewing of t
 <div class="section" id="story-model">
 <h2>Story Model<a class="headerlink" href="#story-model" title="Permalink to this headline">¶</a></h2>
 <p>The Story model is a JSON object that is received by the backend via Django and passed straight into an elasticgit model. The model is as follows:</p>
-<p>Contents:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Story</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&#39;Story Title&#39;</span><span class="p">,</span>
+<span class="s">&quot;author&quot;</span><span class="p">:</span> <span class="s">&#39;The Author&#39;</span><span class="p">,</span>
+<span class="s">&quot;category&quot;</span><span class="p">:</span> <span class="s">&#39;1&#39;</span><span class="p">,</span>
+<span class="s">&quot;body&quot;</span><span class="p">:</span> <span class="s">&#39;The Story&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="urls">
+<h2>URLs<a class="headerlink" href="#urls" title="Permalink to this headline">¶</a></h2>
+<p>At the moment this project is hosted locally and not on a server. Nonetheless the urls are as follows:</p>
+<p>To create a user: backend/createUser
+To create a story: backend/createStory
+To view all stories: backend/</p>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
 </div>
 </div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
-</ul>
 </div>
 
 
@@ -80,9 +84,9 @@ an open-source tool for the collaborative or singular authoring and viewing of t
 <li><a class="reference internal" href="#">Welcome to Mina&#8217;s documentation!</a><ul>
 <li><a class="reference internal" href="#user-model">User Model</a></li>
 <li><a class="reference internal" href="#story-model">Story Model</a></li>
+<li><a class="reference internal" href="#urls">URLs</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 <div class="relations">
 <h3>Related Topics</h3>
