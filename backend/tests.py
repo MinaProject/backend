@@ -73,7 +73,7 @@ class TestCRUD(unittest.TestCase):
                           '   "co_authors": null, "update_count": 3}'):
             assert view_story(request).body != 'story not found'
 
-            #test story_version_correct
+            # test story_version_correct
             request.POST = {"uuid": story.uuid,
                             "update_count": 1}
             assert update_version_correct(request).body != 'story not found'
