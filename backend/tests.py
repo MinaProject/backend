@@ -125,7 +125,8 @@ class TestCRUD(unittest.TestCase):
         request = HttpRequest()
         request.method = 'POST'
         request.POST = {"uuid": story.uuid}
-        assert delete_story(request).body == 'deleted'
+        with patch.object(elasticgit.workspace.Workspace, 'delete'):
+            assert delete_story(request).body == 'deleted'
 
         # test delete user
         request2 = HttpRequest()

@@ -36,7 +36,7 @@ def delete_from_git(storyUUID):
                              es={'urls': ['http://localhost:9200']})
     workspace.setup('Codie Roelf', 'codiebeulaine@gmail.com')
 
-    stories = workspace.S(TestStory)
+    stories = workspace.S(TestStory)[:100]
     for story in stories:
         if story.uuid == storyUUID:
             workspace.delete(story.get_object(), 'deleting')
