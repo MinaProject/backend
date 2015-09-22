@@ -6,7 +6,7 @@ from django.db.models.signals import (
 from django.dispatch import receiver
 from elasticgit import EG
 from elasticinit import TestStory
-
+from utils import pull_from_git
 join = os.path.join
 
 
@@ -87,22 +87,35 @@ class Story(models.Model):
 # posting to EG
 @receiver(post_save, sender=Story)
 def auto_save_to_git(instance, **kwargs):
-    data = TestStory({
-        "title": instance.title,
-        "author": instance.author,
-        "category": instance.category,
-        "body": instance.body,
-        "uuid": instance.uuid,
-        "update_count": instance.update_count,
-        "co_authors": instance.co_authors})
-
     try:
         # EG.init_repo('repos/test_content', bare=False)
         ws = EG.workspace(settings.GIT_REPO_PATH,
                           index_prefix=None,
                           es={'urls': ['http://localhost:9200']})
         ws.setup('Codie Roelf', 'codiebeulaine@gmail.com')
-        ws.save(data, 'saving')
+        story = pull_from_git('repos/test_content',
+                              index_prefix='',
+                              es_host='http://localhost:9200',
+                              uuid=instance.uuid,
+                              category=None)
+        if story != []:
+            story['body'] = instance.body
+            co_authors_list = []
+            for a in story['co_authors']:
+                co_authors_list.add(a)
+            co_authors_list.add(instance.co_authors)
+            story['co_authors'] = co_authors_list
+            story['update_count'] = story['update_count'] + 1
+            ws.save(story, 'saving')
+        else:
+            data = TestStory({"title": instance.title,
+                              "author": instance.author,
+                              "category": instance.category,
+                              "body": instance.body,
+                              "uuid": instance.uuid,
+                              "update_count": instance.update_count,
+                              "co_authors": instance.co_authors})
+            ws.save(data, 'saving')
         if ws.repo.remotes:
             repo = ws.repo
             remote = repo.remote()

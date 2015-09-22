@@ -64,7 +64,11 @@ def update_story(request):
             if permissions == 'yes':
                 story = Story.objects.get(uuid=storyUUID)
                 story.body = data['changes']
-            return 'updated'
+                story.co_athors = data['userUUID']
+                story.save()
+                response = HttpResponse()
+                response.body = 'updated'
+            return response
         except:
             print ''
     response = HttpResponse()

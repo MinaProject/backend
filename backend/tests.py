@@ -3,7 +3,7 @@ from mock import patch
 from views import (create_user, create_story, delete_user, delete_story,
                    view_story, view_user_stories,
                    view_category_stories, view_user,
-                   update_version_correct)
+                   update_version_correct, update_story)
 from django.http import HttpRequest
 import unittest
 from models import Story, UserProfile
@@ -82,6 +82,19 @@ class TestCRUD(unittest.TestCase):
                             "update_count": 3}
             assert update_version_correct(request) == 'story is up to date'
 
+            # test update_story
+            request.POST = {"permissions": 'yes',
+                            "uuid": story.uuid,
+                            "changes": 'Yo what is up',
+                            "userUUID": uuid}
+            assert update_story(request).body == 'updated'
+
+            request.POST = {"permissions": 'no',
+                            "uuid": story.uuid,
+                            "changes": 'Yo what is up',
+                            "userUUID": uuid}
+            assert update_story(request).body == 'not updated'
+
         # test view all category stories
         request.POST = story.category
         with patch.object(elasticgit.workspace.Workspace, 'pull',
@@ -121,7 +134,7 @@ class TestCRUD(unittest.TestCase):
         assert view_user(request) != 'user not found'
 
         # test delete story
-        story = Story.objects.get(title='foo', body='foobar')
+        story = Story.objects.get(title='foo', body='Yo what is up')
         request = HttpRequest()
         request.method = 'POST'
         request.POST = {"uuid": story.uuid}
