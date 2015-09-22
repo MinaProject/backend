@@ -32,6 +32,46 @@ def view_story(request):
     return response
 
 
+def update_version_correct(request):
+    if request.method == 'POST':
+        try:
+            data = request.POST
+            storyUUID = data['uuid']
+            update_count = data['update_count']
+            story = Story.objects.get(uuid=storyUUID)
+            if update_count != story.update_count:
+                response = HttpResponse()
+                response.body = {"title": story.title,
+                                 "author": story.author,
+                                 "category": story.category,
+                                 "body": story.body}
+                return response
+            elif update_count == story.update_count:
+                return 'story is up to date'
+        except:
+            print ''
+    response = HttpResponse()
+    response.body = 'story not found'
+    return response
+
+
+def update_story(request):
+    if request.method == 'POST':
+        try:
+            data = request.POST
+            storyUUID = data['uuid']
+            permissions = data['permissions']
+            if permissions == 'yes':
+                story = Story.objects.get(uuid=storyUUID)
+                story.body = data['changes']
+            return 'updated'
+        except:
+            print ''
+    response = HttpResponse()
+    response.body = 'not updated'
+    return response
+
+
 def view_user_stories(request):
     if request.method == 'POST':
         try:
@@ -90,7 +130,7 @@ def create_story(request):
                                  author=data['author'],
                                  category=data['category'],
                                  body=data['body'],
-                                 update_count=0,
+                                 update_count=data['update_count'],
                                  uuid=uuid.uuid4().hex)
             response = HttpResponse()
             response.body = 'created'

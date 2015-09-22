@@ -2,7 +2,8 @@ import mock
 from mock import patch
 from views import (create_user, create_story, delete_user, delete_story,
                    view_story, view_user_stories,
-                   view_category_stories, view_user)
+                   view_category_stories, view_user,
+                   update_version_correct)
 from django.http import HttpRequest
 import unittest
 from models import Story, UserProfile
@@ -34,9 +35,18 @@ class TestCRUD(unittest.TestCase):
                         "author": uuid,
                         "category": 1,
                         "body": 'foobar',
-                        "update_count": 0,
+                        "update_count": 3,
                         "co_authors": None}
         assert create_story(request).body == 'created'
+
+        # creating second user
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST = {"name": 'test2',
+                        "surname": 'surnameTest2',
+                        "username": 'tester2',
+                        "password": 'tester2'}
+        assert create_user(request).body == 'created'
 
         # # test view all stories
         # with patch.object(elasticgit.workspace.Workspace, 'pull',
@@ -60,9 +70,17 @@ class TestCRUD(unittest.TestCase):
                           '(default, Jul 14 2015, 19:46:27)[GCC '
                           '4.2.1 Compatible Apple LLVM 6.0 (clang-6'
                           '  00.0.39)]", "package": "elastic-git"},'
-                          '   "co_authors": null, "update_count": n'
-                          '   ull}'):
+                          '   "co_authors": null, "update_count": 3}'):
             assert view_story(request).body != 'story not found'
+
+            #test story_version_correct
+            request.POST = {"uuid": story.uuid,
+                            "update_count": 1}
+            assert update_version_correct(request).body != 'story not found'
+            assert update_version_correct(request) != 'story is up to date'
+            request.POST = {"uuid": story.uuid,
+                            "update_count": 3}
+            assert update_version_correct(request) == 'story is up to date'
 
         # test view all category stories
         request.POST = story.category
