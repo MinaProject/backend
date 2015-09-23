@@ -9,12 +9,14 @@ import unittest
 from models import Story, UserProfile
 from django.contrib.auth.models import User
 import elasticgit
+# from utils import delete_from_git
 
 
 class TestCRUD(unittest.TestCase):
 
     @mock.patch('django.db.models.signals.post_save', autospec=True)
-    def test_story_user(self, mock_post_save):
+    @mock.patch('backend.utils.delete_from_git', autospec=True)
+    def test_story_user(self, mock_post_save, mock_delete_from_git):
 
         # test create user
         request = HttpRequest()
