@@ -151,6 +151,7 @@ def delete_story(request):
         try:
             data = request.POST
             storyUUID = data['uuid']
+            print 'error'
             delete_from_git(storyUUID)
             print storyUUID
             response = HttpResponse()
@@ -174,7 +175,7 @@ def delete_user(request):
             response.body = 'deleted'
             return response
         except:
-            print 'codie'
+            print 'error'
     response = HttpResponse()
     response.body = 'not deleted'
     return response

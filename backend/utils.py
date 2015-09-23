@@ -35,6 +35,7 @@ def delete_from_git(storyUUID):
                              index_prefix=None,
                              es={'urls': ['http://localhost:9200']})
     story = workspace.S(TestStory)[:100].filter(uuid=storyUUID)
+    print 'cod2'
     workspace.delete(story, 'deleting')
     print 'cod'
 
