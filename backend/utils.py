@@ -35,9 +35,7 @@ def delete_from_git(storyUUID):
                              index_prefix=None,
                              es={'urls': ['http://localhost:9200']})
     story = workspace.S(TestStory)[:100].filter(uuid=storyUUID)
-    print 'cod2'
     workspace.delete(story, 'deleting')
-    print 'cod'
 
     if workspace.repo.remotes:
         repo = workspace.repo
@@ -46,7 +44,6 @@ def delete_from_git(storyUUID):
         remote_master = remote.refs.master
         remote.push(remote_master.remote_head)
     workspace.refresh_index()
-    print 'codie'
 
 
 def setup_workspace(repo_path, index_prefix, es_host):
