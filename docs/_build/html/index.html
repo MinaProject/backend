@@ -54,18 +54,41 @@ an open-source tool for the collaborative or singular authoring and viewing of t
 <h2>Story Model<a class="headerlink" href="#story-model" title="Permalink to this headline">¶</a></h2>
 <p>The Story model is a JSON object that is received by the backend via Django and passed straight into an elasticgit model. The model is as follows:</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Story</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&#39;Story Title&#39;</span><span class="p">,</span>
-<span class="s">&quot;author&quot;</span><span class="p">:</span> <span class="s">&#39;The Author&#39;</span><span class="p">,</span>
-<span class="s">&quot;category&quot;</span><span class="p">:</span> <span class="s">&#39;1&#39;</span><span class="p">,</span>
-<span class="s">&quot;body&quot;</span><span class="p">:</span> <span class="s">&#39;The Story&#39;</span><span class="p">}</span>
+      <span class="s">&quot;author&quot;</span><span class="p">:</span> <span class="s">&#39;Author UUID&#39;</span><span class="p">,</span>
+      <span class="s">&quot;category&quot;</span><span class="p">:</span> <span class="s">&#39;1&#39;</span><span class="p">,</span>
+      <span class="s">&quot;body&quot;</span><span class="p">:</span> <span class="s">&#39;The Story&#39;</span><span class="p">,</span>
+      <span class="s">&quot;update_count&quot;</span><span class="p">:</span> <span class="s">&#39;Integer, defaults to 0&#39;</span><span class="p">,</span>
+      <span class="s">&quot;co_authors&quot;</span><span class="p">:</span> <span class="s">&#39;UUID of co_author&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="urls">
 <h2>URLs<a class="headerlink" href="#urls" title="Permalink to this headline">¶</a></h2>
 <p>At the moment this project is hosted locally and not on a server. Nonetheless the urls are as follows:</p>
-<p>To create a user: backend/createUser
-To create a story: backend/createStory
-To view all stories: backend/</p>
+<dl class="docutils">
+<dt>To create a user: backend/create_user</dt>
+<dd>This takes in an HttpRequest that has a POST method where the post contains json user model defined above</dd>
+<dt>To create a story: backend/create_story</dt>
+<dd>This takes in an HttpRequest that has a POST method where the post contains json story model defined above</dd>
+<dt>To delete a user: backend/delete_user</dt>
+<dd>This takes in an HttpRequest that has a POST method where the post contains uuid of the user to be deleted</dd>
+<dt>To delete a story: backend/delete_story</dt>
+<dd>This takes in an HttpRequest that has a POST method where the post contains the uuid of the story to be     deleted</dd>
+<dt>To view a user&#8217;s info: backend/view_user</dt>
+<dd>This takes in an HttpRequest that has a POST method where the post contains uuid of the user to be viewed</dd>
+<dt>To view all stories: backend/</dt>
+<dd>This takes any request as an argument and returs a list of all the stories</dd>
+<dt>To view all user stories: backend/view_user_stories</dt>
+<dd>This takes a user uuid and returns a list of all the stories that user has created</dd>
+<dt>To view all cetegory stories: backend/view_category_stories</dt>
+<dd>This takes in a category (integer), and returns all the stories in that category</dd>
+<dt>To check if the user has the correct current story: backend/update_version_correct</dt>
+<dd>This takes in the stories update count as &#8216;update_count&#8217; and the story&#8217;s uuid as &#8216;uuid&#8217;, and returns &#8216;story
+is up to date&#8217; if the story version is correct, else it returns the correct version of the story as &#8220;title&#8221;,  &#8220;author&#8221;, &#8220;category&#8221; and &#8220;body&#8221;</dd>
+<dt>To update a story: backend/update_story</dt>
+<dd>This takes in the second user&#8217;s uuid as &#8220;userUUID&#8221;, the story permissions to change as &#8220;permissions&#8221; (either  &#8216;yes&#8217; or &#8216;no&#8217;, the story UUID as &#8220;uuid&#8221; and the changes as &#8220;changes&#8221;. It returns &#8216;updated&#8217; if the update was
+successfull and &#8216;not updated if the update was not successfull.</dd>
+</dl>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
