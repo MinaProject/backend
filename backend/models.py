@@ -102,8 +102,8 @@ def auto_save_to_git(instance, **kwargs):
             story['body'] = instance.body
             co_authors_list = []
             for a in story['co_authors']:
-                co_authors_list.add(a)
-            co_authors_list.add(instance.co_authors)
+                co_authors_list.append(a)
+            co_authors_list.ppend(instance.co_authors)
             story['co_authors'] = co_authors_list
             story['update_count'] = story['update_count'] + 1
             ws.save(story, 'saving')

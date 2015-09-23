@@ -34,13 +34,10 @@ def delete_from_git(storyUUID):
     workspace = EG.workspace('repos/test_content',
                              index_prefix=None,
                              es={'urls': ['http://localhost:9200']})
-    workspace.setup('Codie Roelf', 'codiebeulaine@gmail.com')
+    story = workspace.S(TestStory)[:100].filter(uuid=storyUUID)
+    workspace.delete(story, 'deleting')
+    print 'cod'
 
-    stories = workspace.S(TestStory)[:100]
-    for story in stories:
-        if story.uuid == storyUUID:
-            workspace.delete(story.get_object(), 'deleting')
-            print('deleted')
     if workspace.repo.remotes:
         repo = workspace.repo
         remote = repo.remote()
@@ -48,6 +45,7 @@ def delete_from_git(storyUUID):
         remote_master = remote.refs.master
         remote.push(remote_master.remote_head)
     workspace.refresh_index()
+    print 'codie'
 
 
 def setup_workspace(repo_path, index_prefix, es_host):
