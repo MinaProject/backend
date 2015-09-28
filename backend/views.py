@@ -31,7 +31,7 @@ def view_story(request):
     response.body = 'story not found'
     return response
 
-
+  
 def update_version_correct(request):
     if request.method == 'POST':
         try:
@@ -115,9 +115,9 @@ def create_user(request):
                                             first_name=data['name'],
                                             last_name=data['surname'],
                                             password=data['password'])
-            UserProfile.objects.create(user=user, uuid=uuid.uuid4().hex)
+            up = UserProfile.objects.create(user=user, uuid=uuid.uuid4().hex)
             response = HttpResponse()
-            response.body = 'created'
+            response.body = up.uuid
             return response
         except:
             print ''
@@ -159,6 +159,27 @@ def delete_story(request):
             print ''
     response = HttpResponse()
     response.body = 'not deleted'
+    return response
+
+
+def update_user(request):
+    if request.method == 'POST':
+        try:
+            data = request.POST
+            uuid = data['uuid']
+            username = data['username']
+            password = data['password']
+            user = UserProfile.objects.get(uuid=uuid).user
+            user.username = username
+            user.password = password
+            user.save()
+            response = HttpResponse()
+            response.body = 'updated'
+            return response
+        except:
+            print ''
+    response = HttpResponse()
+    response.body = 'not updated'
     return response
 
 

@@ -1,7 +1,7 @@
 import mock
 from mock import patch
 from views import (create_user, create_story, delete_user, delete_story,
-                   view_story, view_user_stories,
+                   view_story, view_user_stories, update_user,
                    view_category_stories, view_user,
                    update_version_correct, update_story)
 from django.http import HttpRequest
@@ -25,7 +25,7 @@ class TestCRUD(unittest.TestCase):
                         "surname": 'surnameTest',
                         "username": 'tester',
                         "password": 'tester'}
-        assert create_user(request).body == 'created'
+        assert len(create_user(request).body) == 32
 
         # test create story
         user = User.objects.get(username='tester')
@@ -48,7 +48,7 @@ class TestCRUD(unittest.TestCase):
                         "surname": 'surnameTest2',
                         "username": 'tester2',
                         "password": 'tester2'}
-        assert create_user(request).body == 'created'
+        assert len(create_user(request).body) == 32
 
         # # test view all stories
         # with patch.object(elasticgit.workspace.Workspace, 'pull',
@@ -134,6 +134,14 @@ class TestCRUD(unittest.TestCase):
         # test view user information
         request.POST = uuid
         assert view_user(request) != 'user not found'
+
+        # updating second user
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST = {"uuid": uuid,
+                        "username": 'tester',
+                        "password": 'tester2'}
+        assert update_user(request).body == 'updated'
 
         # test delete story
         story = Story.objects.get(title='foo', body='Yo what is up')
