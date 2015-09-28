@@ -31,7 +31,7 @@ def view_story(request):
     response.body = 'story not found'
     return response
 
-  
+
 def update_version_correct(request):
     if request.method == 'POST':
         try:
